@@ -8,9 +8,12 @@ import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Logger;
 
 @RestController
 public class Controller {
+
+    private static final Logger LOGGER = Logger.getLogger(Controller.class.getName());
 
     @Autowired
     Config config;
@@ -36,6 +39,7 @@ public class Controller {
         if (error instanceof TimeoutException) {
             return Mono.just("Timeout occurred while calculating Fibonacci. Time limit: " + config.getTimeoutMillies() + "ms");
         } else {
+            LOGGER.severe("Unexpected Error: " + error);
             return Mono.just("Unexpected Error Occurred");
         }
     }

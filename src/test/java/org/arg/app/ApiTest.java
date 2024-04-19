@@ -21,6 +21,7 @@ public class ApiTest {
     @BeforeEach
     public void setUp() {
         webTestClient = webTestClient.mutate()
+                // This makes sure the timeout of the test webclient is longer than the api timeout
                 .responseTimeout(Duration.ofMillis(3000))
                 .build();
     }
