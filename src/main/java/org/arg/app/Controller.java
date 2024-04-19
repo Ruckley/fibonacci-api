@@ -28,13 +28,13 @@ public class Controller {
         if(n < 0) return Mono.just("n must be 0 or positive.");
 
         return service.calculateFibonacci(n)
-                .timeout(Duration.ofMillis(20/*config.getTimeoutMillies()*/))
+                .timeout(Duration.ofMillis(config.getTimeoutMillies()))
                 .onErrorResume(this::handleError);
     }
 
     private Mono<String> handleError(Throwable error) {
         if (error instanceof TimeoutException) {
-            return Mono.just("Timeout occurred while calculating Fibonacci.");
+            return Mono.just("Timeout occurred while calculating Fibonacci. Time limit: " + config.getTimeoutMillies() + "ms");
         } else {
             return Mono.just("Unexpected Error Occurred");
         }
