@@ -1,5 +1,6 @@
 package org.arg.app;
 
+import org.arg.app.config.Config;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ import java.time.Duration;
 public class ApiTest {
 
     @Autowired
+    Config config;
+
+    @Autowired
     private WebTestClient webTestClient;
 
     @BeforeEach
@@ -28,43 +32,41 @@ public class ApiTest {
 
     @Test
     void canHandleFibRequest() {
-        webTestClient.get().uri("/fib?n=3")
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectBody(String.class).isEqualTo("2");
+        testFibRequest("3", "2");
     }
 
     @Test
     void canHandleFibRequestWithLargeN() {
-        webTestClient.get().uri("/fib?n=2000")
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectBody(String.class)
-                .isEqualTo("4224696333392304878706725602341482782579852840250681098010280137314308584370130707224123599639141511088446087538909603607640194711643596029271983312598737326253555802606991585915229492453904998722256795316982874482472992263901833716778060607011615497886719879858311468870876264597369086722884023654422295243347964480139515349562972087652656069529806499841977448720155612802665404554171717881930324025204312082516817125");
+        testFibRequest("2000", "4224696333392304878706725602341482782579852840250681098010280137314308584370130707224123599639141511088446087538909603607640194711643596029271983312598737326253555802606991585915229492453904998722256795316982874482472992263901833716778060607011615497886719879858311468870876264597369086722884023654422295243347964480139515349562972087652656069529806499841977448720155612802665404554171717881930324025204312082516817125");
     }
 
     @Test
     void canHandleNegativeN() {
-        webTestClient.get().uri("/fib?n=-1")
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(String.class)
-                .isEqualTo("n must be 0 or positive.");
+        testFibRequest("-1", "n must be 0 or positive.");
+    }
 
+    @Test
+    void canHandleNonNumericN() {
+        webTestClient.get().uri("/fib?n=asdf")
+                .exchange()
+                .expectStatus().isBadRequest();
 
     }
 
     @Test
     void timeOutOnLongRunningFibRequest() {
-        webTestClient.get().uri("/fib?n=99999999999")
+        testFibRequest(
+                "99999999999",
+                "Timeout occurred while calculating Fibonacci. Time limit: " + config.getTimeoutMillies() + "ms"
+        );
+    }
+
+    private void testFibRequest(String n, String expectedResponse) {
+        webTestClient.get().uri("/fib?n=" + n)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class)
-                .isEqualTo("Timeout occurred while calculating Fibonacci.");
-
-
+                .isEqualTo(expectedResponse);
     }
 
 }

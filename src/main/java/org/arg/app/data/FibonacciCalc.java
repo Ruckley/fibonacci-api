@@ -1,4 +1,4 @@
-package org.arg.app;
+package org.arg.app.data;
 
 import org.springframework.stereotype.Component;
 
