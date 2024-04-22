@@ -19,7 +19,9 @@ Any errors thrown during execution of a route will be caught and the api will re
 trace will be logged.<br>
 I have taken advantage of the webflux to handle any malformed requests. If a malformed request is recieved the service will
 return a 400 bad request.<br>
-The fib route is designed to have a timeout of 1 minuite. This can be set in the config yaml.<br>
+The fib route has a timeout that can be set in the config file. I have set it to 15 seconds which on my machine is enough
+to calculate n to 6 digits. If you want to change this value above 30 please also change the grace period in the fib.yaml as this
+will ensure scaling doesnt shut down a pod mid calculation.
 
 ## Docker container
 
@@ -31,8 +33,12 @@ target directory on build
 The Kubernetes yaml creates a deployment for the fibonacci service with ready and live probes that mae use of the health_check
 route.<br>
 A horizontal pod autoscaler is also created to manage scaling for the service pods. As the service route is non-blocking
-this will not greatly improve performance but it should make it more resilient. The minimum replicants is set to 2 so that
+this will not greatly improve performance but it should make it more resilient. The minimum replicants is set to 3 so that
 if one goes down there will always be another to serve requests until another is spun up.
+I have set a request limit of 0.2. This will be overkill for most requests but as large n will require a lasrge amount of
+cpu resources its a good starting point. No CPU limit is set as I have found that setting CPU limits causes more issues
+than it solves. As threre is only a single type of node and pod in this deployment there shouldnt be resource starvation
+issues.
 
 ## Testing
 

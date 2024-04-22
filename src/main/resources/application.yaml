@@ -1,6 +1,6 @@
 api:
   general:
-    timeoutMillies: 50000
+    timeoutMillies: 15000
 
 server:
   port: 8000

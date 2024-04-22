@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: fibonacci
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: fibonacci
@@ -12,6 +12,7 @@ spec:
       labels:
         app: fibonacci
     spec:
+      terminationGracePeriodSeconds: 30
       containers:
         - name: fibonacci
           imagePullPolicy: IfNotPresent
@@ -30,6 +31,10 @@ spec:
               port: 8000
             initialDelaySeconds: 15
             periodSeconds: 20
+          resources:
+            requests:
+              cpu: "0.2"
+              memory: "512Mi"
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -40,7 +45,7 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: fibonacci
-  minReplicas: 2
+  minReplicas: 3
   maxReplicas: 10
   metrics:
     - type: Resource

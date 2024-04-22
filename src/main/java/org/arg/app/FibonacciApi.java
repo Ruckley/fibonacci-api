@@ -6,14 +6,18 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.reactive.config.EnableWebFlux;
 
+
+/**
+ * Main class for the Fibonacci API
+ */
 @EnableWebFlux
 @SpringBootApplication
 @ComponentScan(basePackages = "org.arg.app")
 @EnableConfigurationProperties(Config.class)
-public class FibinacciApi {
+public class FibonacciApi {
 
     public static void main(String[] args) {
-        SpringApplication.run(FibinacciApi.class, args);
+        SpringApplication.run(FibonacciApi.class, args);
     }
 
 }

@@ -46,7 +46,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>org.arg.app.FibinacciApi</mainClass>
+                    <mainClass>org.arg.app.FibonacciApi</mainClass>
                 </configuration>
                 <executions>
                     <execution>

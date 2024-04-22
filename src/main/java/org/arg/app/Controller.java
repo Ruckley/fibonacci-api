@@ -10,6 +10,9 @@ import java.time.Duration;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
 
+/**
+ * The Fibonaci API controller class. Handles api requests.
+ */
 @RestController
 public class Controller {
 
@@ -20,11 +23,22 @@ public class Controller {
     @Autowired
     private FibonacciService service;
 
+    /**
+     * A health check route for use by Kubernetes and general health checking purposes.
+     * @return 200 response
+     */
     @GetMapping("/health_check")
     public Mono<ResponseEntity<String>> healthCheck() {
         return Mono.just(ResponseEntity.ok().build());
     }
 
+    /**
+     * The Fibonacci route for the API.
+     * Any input for n that cannot be converted to a Long will be rejected with a 400 Bade Request response.
+     * A negative n will return an error message.
+     * @param n The Fibonacci number to be returned.
+     * @return The nth Fibonacci number.
+     */
     @GetMapping("/fib")
     public Mono<String> fibinacci(@RequestParam(required = true, name = "n") Long n) {
 
@@ -35,6 +49,12 @@ public class Controller {
                 .onErrorResume(this::handleError);
     }
 
+    /**
+     * A helper method for handling any error created during the execution of a route.
+     * Logs the error and returns an explanation to the caller.
+     * @param error The error thrown during execution.
+     * @return Mono of error explanation.
+     */
     private Mono<String> handleError(Throwable error) {
         if (error instanceof TimeoutException) {
             return Mono.just("Timeout occurred while calculating Fibonacci. Time limit: " + config.getTimeoutMillies() + "ms");

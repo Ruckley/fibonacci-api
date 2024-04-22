@@ -4,33 +4,22 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
 
+/**
+ * A Class that holds methods for calculating the nth fibinacci value
+ */
 @Component
 public class FibonacciCalc {
 
-    // My initial thought was to use tail recursion but the Java compiler cant guarantee that a method will be tail
-    // recursive even if written to be so
+    /**
+     * Calculates the nth fibonacci number using a simple iterative algorithm.
+     *
+     * @param n The Fibonacci number to calculate
+     * @return The nth Fibonacci number
+     * @throws IllegalArgumentException Throws exception if n is negative.
+     */
+    public BigInteger fibonacciCalc(Long n) throws IllegalArgumentException {
 
-//    public BigInteger fibonacciCalc(Integer n) {
-//        if (n.equals(0)) {
-//            return BigInteger.ZERO;
-//        } else {
-//            return fibonacciCalc(BigInteger.ZERO, BigInteger.ONE, 1, n);
-//        }
-//    }
-//
-//    private BigInteger fibonacciCalc(BigInteger last, BigInteger current, Integer count, Integer n) {
-//        if (count.equals(n)) {
-//            return current;
-//        } else {
-//            BigInteger newCurrent = last.add(current);
-//            return fibonacciCalc(current, newCurrent, count + 1, n);
-//        }
-//    }
-
-    //Iterative calculation
-    public BigInteger fibonacciCalc(Long n) throws IllegalArgumentException{
-
-        if(n < 0) throw new IllegalArgumentException("fibinacciCalc passed negative n value");
+        if (n < 0) throw new IllegalArgumentException("fibinacciCalc passed negative n value");
 
         BigInteger a = BigInteger.ZERO;
         BigInteger b = BigInteger.ONE;
@@ -44,3 +33,5 @@ public class FibonacciCalc {
         return a;
     }
 }
+
+
