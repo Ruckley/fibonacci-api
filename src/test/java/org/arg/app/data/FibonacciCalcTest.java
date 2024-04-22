@@ -1,6 +1,6 @@
 package org.arg.app.data;
 
-import org.arg.app.data.FibonacciCalc;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,12 +10,11 @@ import java.math.BigInteger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest(classes = FibonacciCalc.class)
+@SpringBootTest
 public class FibonacciCalcTest {
 
     @Autowired
     FibonacciCalc calc;
-
 
     @Test
     void fibonacciCalcHandlesZero() {
